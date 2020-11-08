@@ -1,0 +1,73 @@
+---
+title: "Week 5 - Code Along Lab"
+author: "Hannah Brady"
+date: "11/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(effsize)
+library(broom)
+library(ggbeeswarm)
+library(car)
+```
+
+# Penguins size comparisons
+
+Installed a bunch of packages in the console.
+
+## Part 1. T-tests
+
+Do we have enough evidence to think these are drawn from populations with separate means?
+
+Mass comparison: male & female chinstrap penguins
+
+In console: >View(penguins)
+
+Explore data first
+
+```{r}
+chinstraps <- penguins %>% 
+  filter(species == "Chinstrap")
+
+## Histograms
+
+ggplot(data = chinstraps, aes(x = body_mass_g)) +
+  geom_histogram(bins = 10) +
+  facet_wrap(~sex)
+
+# Interpretation:
+# Somewhat bell-shaped, means mean is an appropriate central tendency to evaluate.
+# Somewhat symmetric so relatively normal distribution
+# Male central tendency seems higher than female.
+
+## QQ plot
+
+ggplot(data = chinstraps, aes(sample = body_mass_g)) +
+  geom_qq()+
+  facet_wrap(~sex)
+
+# A QQ plot plots the sample against a theoretically normally distributed sample, that's why linear = normally distributed
+# Ran together before facet wrap and they looked normal already. But want to explore within groups so facet wrap.
+# These are as close to normally distributed as you can hope real world data gets.
+
+## Get descriptive statistics
+
+chinstraps %>% 
+  group_by(sex) %>% 
+  summarise(
+    mean_mass = mean(body_mass_g),
+    median_mass = median(body_mass_g),
+    sd_mass = sd(body_mass_g),
+    sample_size = n()
+  )
+
+# Table not stored but output in RMD knitted file
+# Means a bit different, median similar (normality tells us this would be the case)
+# Same sample size, similar std devs.
+# More important than the p-value!
+```
+

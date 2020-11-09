@@ -71,3 +71,70 @@ chinstraps %>%
 # More important than the p-value!
 ```
 
+
+Get vectors of body_mass_g for female and male chinstrap penguins separately.
+
+```{r}
+chinstraps_f <- chinstraps %>% 
+  filter(sex == "female") %>% 
+  pull(body_mass_g)
+
+chinstraps_m <- chinstraps %>% 
+  filter(sex == "male") %>% 
+  pull(body_mass_g)
+```
+
+### T-tests, a couple different ways
+
+1. Is there a significant difference in body mass between make and female chinstrap penguins.
+
+This is a two-sided question. Not is one larger than the other, but in both directions.
+
+```{r}
+chinstrap_ttest <- t.test(chinstraps_f, chinstraps_m)
+chinstrap_ttest
+
+cohen.d(chinstraps_f, chinstraps_m)
+```
+
+t value is how different from zero the means are, df is "degrees of freedom" dependent on sample size.
+
+p-value is tiny! Suficient evidence to reject null hypothesis that two samples drawn from populations with same mean.
+We conclude that there is a signficant difference between male and female body mass. But need to discuss actual difference. Also effect size!
+
+Magnitude of effect size is -1.26. This is large. Means large diff between groups' means.
+
+Broom function: see the key downloaded from Gauchospace to get outputs from t-test in a nice data frame so you can call the results easily as you type up results.
+
+Are male chinstrap penguins significantly larger (body mass) than female chinstrap penguins?
+
+This is a one-sided question. "What are the chances I would get means this different and larger?"
+
+```{r}
+t.test(chinstraps_m, chinstraps_f, alternative = "greater")
+# Is male mass greater than female? So put male then female then greater.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
